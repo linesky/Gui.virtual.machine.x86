@@ -26,6 +26,9 @@ class BareboneBuilder:
 
         self.run_button = tk.Button(self.root, text="X86.img or x86.bin", command=self.run_kernel)
         self.run_button.pack(pady=5)
+        self.run_button = tk.Button(self.root, text="X86.img x 86.bin hard", command=self.copy_file)
+        self.run_button.pack(pady=5)
+
 
     def execute_command(self, command,show:bool):
         try:
@@ -47,11 +50,10 @@ class BareboneBuilder:
 
 
     def copy_file(self):
+        filename = tk.filedialog.askopenfilename(title="Select file")
         self.text_area.delete(1.0, tk.END)
-        filename = tk.filedialog.asksaveasfilename(title="Select file")
-        if filename:
-            shutil.copy( f"./file/new",filename+".c")
-            self.text_area.insert(tk.END, f"File {filename} copied \n",True)
+        self.execute_command('/usr/bin/qemu-system-x86_64 -boot c -hda "$1" '.replace("$1",filename),True)
+
 
 
 if __name__ == "__main__":
